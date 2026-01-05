@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaporation-Rate</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Fjalla+One&family=Oswald:wght@200..700&family=Share+Tech&family=WDXL+Lubrifont+TC&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
+    <link rel="stylesheet" href="./static/css/new_style.css">
+    <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/ag-grid-community/styles/ag-grid.css"
+  />
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/ag-grid-community/styles/ag-theme-alpine.css"
+  />
+  <script src="https://cdn.jsdelivr.net/npm/ag-grid-community/dist/ag-grid-community.noStyle.js"></script>
+    <style>
+        #myGrid {
+            height: 500px;
+            width: 100%;
+        }
+        .ag-theme-alpine {
+            --ag-font-family: "Oswald", sans-serif;
+            --ag-font-size: 18px;
+        }
+        .ag-theme-alpine .ag-header-cell-label {
+            white-space: normal !important;
+            line-height: 1.4em;
+            word-break: break-word;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar bg-body-tertiary p-2" style="background: transparent !important; outline: none;">
+        <div class="container-fluid d-flex justify-content-center" style="background: transparent !important;">
+            <a class="navbar-brand mx-auto text-center" href="/Evaporation" style="text-decoration: none; background: transparent !important;">
+            <h1 class="title" style="outline: none;" tabindex="0">MACHINE LEARNING BASED PREDICTION OF THE PROCESS PARAMETERS<br>FOR M/S. AGROCEL INDUSTRIES PRIVATE LIMITED, GUJARAT</h1>
+            </a>
+        </div>
+    </nav>
+    <marquee behavior="scroll" direction="left" scrollamount="8" style="color: white; text-shadow: 2.5px 2.5px 1px black; font-size: 22px;margin: 0 20px;">
+        ⚠️ Note: The Prediction done here is based on historical data and those data are pretrained and predicted in the backend after you select the date range. ⚠️
+    </marquee>
+    <div>
+        <div id="loading-overlay">
+            <div class="loading-spinner">   
+                <div class="spinner"></div>
+                    Loading, please wait...
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="entire">
+        <div class="input-section">
+            <div class="shape">
+                <div class="main card main_Evap">
+                    <h3>Evaporation Rate Prediction</h3>
+                    <hr style="border: 1px solid black; width: 100%; margin: 5px;">
+                    <form method="POST" action="/EvaporationRate" enctype="multipart/form-data">
+                        <div class="Area-choice">
+                            <label class="radiozone"><input type="radio" name="toggle" value="a" onclick="toggleDivs('a')" checked> Zone - B</label>
+                            <label class="radiopond"><input type="radio" name="toggle" value="b" onclick="toggleDivs('b')"> Ponds</label>
+                            <!-- <div id="optionA" class="toggle-content" style="display: block; margin-top: 4px;">
+                                <div class="Zone-choice">
+                                    <label>Choose a Zone : </label>
+                                    <select id="zoneSelect" name="zone_select">
+                                        <option value="Zone A">Zones A</option>
+                                        <option value="Zone B">Zones B</option>
+                                    </select>
+                                </div>
+                            </div> -->
+                            <!-- <div id="optionB" class="toggle-content" style="margin-top: 4px;">
+                                <div class="Pond-choice">
+                                    <label>Choose a Pond : </label>
+                                    <select id="pondSelect" name="pond_select">
+                                        <option value="Pond A">Pond A</option>
+                                        <option value="Pond B">Pond B</option>
+                                        <option value="Pond C">Pond C</option>
+                                        <option value="Pond D">Pond D</option>
+                                        <option value="Pond E">Pond E</option>
+                                        <option value="Pond F">Pond F</option>
+                                    </select>
+                                </div>
+                            </div> -->
+                            <div id="optionB" class="toggle-content" style="margin-top: 4px;">
+                                <div class="Pond-choice">
+                                    <label>Choose a Location :</label>
+                                    <select id="pondSelect" name="pond_select">
+                                        <option value="Dhordo">Dhordo</option>
+                                        <option value="Khavda">Khavda</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <hr id="line" style="border: 1px solid black; width: 100%; margin: 10px;">
+                        <div class="daysChoice">
+                            <h5>Select the range of Date :</h5>
+                            <label class="my-2" for="monthSelectStart">Starting Date: 
+                                <select id="monthSelectStart" name="startMonthEvap" required></select>
+                            </label>
+                            <label class="mb-3" for="monthSelectEnd">Ending Date: 
+                                <select id="monthSelectEnd" name="endMonthEvap" required></select>
+                            </label>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100 w-md-auto">Predict</button>
+                        <input type="hidden" name="toggle" id="modeToggle" value="{{ selected_mode or 'a' }}">
+                    </form>
+                </div>
+            </div>
+            <div class="nav-btn">
+                <a href="{{ url_for('home') }}" class="btn btn-home" style="background: linear-gradient(to bottom, #087ddc 0%, #2c53c6 100%); border: none !important; color: white; font-weight: bold; padding: 5px 15px 5px 15px;">Home</a>
+                <a href="{{ url_for('logout') }}" class="btn btn-log-out" style="background-color: red; color: white; border-top: none !important; font-weight: bold; ">Logout</a>
+            </div>
+        </div>      
+        
+        <div class="output-section">
+            <h2>Result :</h2>
+            <div id="errors"></div>
+                <div id="progress">
+                    <h5>Predicting...</h5>
+                    <div id="progressContainer">
+                    <div id="progressBar"></div>
+                </div>
+                <p id="progressText" style="margin-top: 5px;">0%</p>
+            </div>
+            {% if show_output %}
+            <div id="selectedName">
+                {{ prediction_label }}
+            </div>
+            {% endif %}
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            {% endwith %}
+
+            {% if table_data %}
+            <div class="output-result" id="outputRange" style="display: none;">
+                <h4 style="margin: 10px 0 10px 0;">Prediction : </h4>
+                <!-- <div id="table">
+                    {{ table_html | safe }}
+                </div> -->
+                <div id="myGrid" class="ag-theme-alpine"></div>
+                <script id="tableData" type="application/json">
+                    {{ table_data | tojson | safe }}
+                </script>
+
+                <script id="columnDefs" type="application/json">
+                    {{ columns | tojson | safe }}
+                </script> 
+
+                <script>
+                    document.addEventListener("DOMContentLoaded", function () {
+                        const rowData = JSON.parse(document.getElementById("tableData").textContent);
+                        const columnDefs = JSON.parse(document.getElementById("columnDefs").textContent);
+
+                        console.log("rowData:", rowData);
+                        console.log("columnDefs:", columnDefs);
+
+                        const gridOptions = {
+                        columnDefs,
+                        headerHeight: 90,
+                        rowData,
+                        theme:'legacy',
+                        defaultColDef: {
+                            sortable: true,
+                            filter: true,
+                            resizable: true,
+                        },
+                        pagination: true,
+                        paginationPageSize: 10,
+                        };
+
+                        const gridDiv = document.querySelector('#myGrid');
+                        gridApi = agGrid.createGrid(document.querySelector("#myGrid"), gridOptions);
+                    });
+                </script>
+                <a href="{{ url_for('download_predictions_Evap') }}" class="btn btn_DC">📥 Download Predictions</a>
+                <h4 style="padding: 10px 0 10px 0;">Visualization : </h4>
+                <div style="overflow-x: auto; border: 1px solid #ccc; margin-bottom: 10px;">
+                    {{ plot_html|safe }}
+                </div>
+            </div>
+            <script>
+                document.getElementById('progress').style.display='block'
+                setTimeout(()=>{ 
+                document.getElementById('outputRange').style.display='block'
+                document.getElementById('selectedName').style.display='block'
+                },2850)
+            </script>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="nav-btn-sm">
+        <a href="{{ url_for('home') }}" class="btn btn-home" style="background: linear-gradient(to bottom, #45a7f7 0%, #2c53c6 100%); border: none !important; color: white; font-weight: bold; padding: 5px 15px 5px 15px;">Home</a>
+        <a href="{{ url_for('logout') }}" class="btn btn-log-out" style="background-color: red; color: white; border-top: none !important; font-weight: bold; ">Logout</a>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="background: linear-gradient(to bottom, #ffcc66 0%, #ffcc66 100%); color: black;">
+                <div class="modal-header" style="border-bottom: black;">
+                    <h5 class="modal-title">File Format</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Please upload the CSV file in the format mentioned below...</p>
+                    <img id="modalImage" src="static/images/wind_format.png" class="img-fluid" alt="Preview">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        const selectst = document.getElementById("monthSelectStart");
+        const yearst = 2025;
+
+        for (let month = 1; month <= 12; month++) {
+            const monthStr = month.toString().padStart(2, '0');  // 01–12
+            const option = document.createElement("option");
+            option.value = `${yearst}-${monthStr}`;              // ✅ Corrected to YYYY-MM
+            option.textContent = `${monthStr}-${yearst}`;
+            selectst.appendChild(option);
+        }
+
+        const selectend = document.getElementById("monthSelectEnd");
+        const yearend = 2025;
+
+        for (let month = 1; month <= 12; month++) {
+            const monthStr = month.toString().padStart(2, '0');
+            const option = document.createElement("option");
+            option.value = `${yearend}-${monthStr}`;             // ✅ Corrected to YYYY-MM
+            option.textContent = `${monthStr}-${yearend}`;
+            selectend.appendChild(option);
+        }
+
+        function toggleDivs(option) {
+            // document.getElementById('optionA').style.display = (option === 'a') ? 'block' : 'none';
+            document.getElementById('optionB').style.display = (option === 'b') ? 'block' : 'none';
+            document.getElementById('line').style.border = (option === 'b') ? '1px solid black' : '1px solid transparent';
+            // ✅ Update hidden input
+            document.getElementById('modeToggle').value = option;
+        }
+
+        // Trigger update on load
+        window.onload = function () {
+            const selectedToggle = document.querySelector('input[name="toggle"]:checked');
+            if (selectedToggle) {
+                toggleDivs(selectedToggle.value);
+            }
+        };
+
+        //Progress and Loading Overlay
+        document.addEventListener("DOMContentLoaded", function () {
+        const overlay = document.getElementById("loading-overlay");
+
+        // ✅ Only show overlay if the form is valid
+        document.querySelectorAll("form").forEach(form => {
+            form.addEventListener("submit", function (e) {
+            if (!form.checkValidity()) {
+                // Block the overlay from showing
+                return;
+            }
+            overlay.style.display = "block";
+            });
+        });
+
+        // ⚠️ This section is redundant and can be removed or disabled to prevent double overlay logic
+        document.querySelectorAll("button[type='submit'], input[type='submit'], .submit-btn").forEach(button => {
+            button.addEventListener("click", function () {
+            // Don't enable this unless you're sure the form is valid here (not recommended)
+            // overlay.style.display = "block";
+            });
+        });
+        });
+
+        document.querySelectorAll("form").forEach(form => {
+        form.addEventListener("submit", function (e) {
+            if (!form.checkValidity()) {
+            e.preventDefault();
+            form.reportValidity(); // ✅ Show built-in HTML5 error popup
+            return;
+            }
+            overlay.style.display = "block";
+        });
+        });
+
+            // progress bar 
+        let progress_state = 0;
+        const progressBar = document.getElementById("progressBar");
+        const progressText = document.getElementById("progressText");
+
+        function updateProgress() {
+            if (progress_state < 100) {
+            progress_state += 1;
+            progressBar.style.width = progress_state + "%";
+            progressText.innerText = progress_state + "%";
+            setTimeout(updateProgress, 25);
+            }
+        }
+        updateProgress();
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+bromine-venv/
+uploads/
+.venv/
+.idea/
+__pycache__/
+app/__pycache__
+app/app/
