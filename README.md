@@ -1,5 +1,3 @@
----
-
 ## ⚙️ Setup (Without Docker)
     
 1. **Install dependencies**
