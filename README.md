@@ -13,7 +13,7 @@
    python main.py
    ```
     
-3. Open your browser: [http://localhost:5000](http://localhost:5000)
+3. Open browser: [http://localhost:5000](http://localhost:5000)
     
 ---
 
