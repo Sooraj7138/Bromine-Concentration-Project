@@ -1,20 +1,20 @@
 ---
 
 ## ⚙️ Setup (Without Docker)
-
+    
 1. **Install dependencies**
-    ```bash
-    pip install -r requirements.txt
-    ```
-
+   ```bash
+   pip install -r requirements.txt
+   ```
+    
 2. **Run app locally**
-    ```bash
-    cd app
-    python main.py
-    ```
-
+   ```bash
+   cd app
+   python main.py
+   ```
+    
 3. Open your browser: [http://localhost:5000](http://localhost:5000)
-
+    
 ---
 
 ## 🐳 Setup Using Docker (Recommended for deployment)
