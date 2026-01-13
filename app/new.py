@@ -1,5 +1,3 @@
-import csv
-
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, r2_score
@@ -31,7 +29,6 @@ model.fit(X_train, y_train)
 # Predict
 # y_pred = model.predict(X_test)
 
-#[[220186, 174828, 0.26],[180910, 162424, 0.24],[160182, 162004, 0.23],[165361, 172824, 0.26],[181710, 163372, 0.22],[154243, 172836, 0.22],[208378, 164236, 0.21],[205635, 173020, 0.2]]
 # Predict on new data
 new_data = pd.read_csv("D:\Sooraj\Project_Bromine_Concentration/app\data/tester.csv")
 new_data["predicted_final"] = model.predict(new_data)
