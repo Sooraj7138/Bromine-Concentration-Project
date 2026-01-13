@@ -25,7 +25,6 @@ model = XGBRegressor(
     colsample_bytree=0.8,   # fraction of features used per tree
     random_state=42
 )
-
 # Train
 model.fit(X_train, y_train)
 
