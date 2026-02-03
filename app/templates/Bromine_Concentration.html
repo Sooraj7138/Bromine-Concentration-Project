@@ -57,7 +57,7 @@
     </div>
     
     <div class="entire">
-        <div class="input-section">
+        <div class="input-section" style="width: 490px !important">
             <div class="shape">
                 <div class="main card main_Evap">
                     <h3>Bromine Concentration Calculation</h3>  
@@ -77,7 +77,7 @@
                             </div> -->
                             <div id="optionB" class="toggle-content" style="margin-top: 4px;">
                                 <div class="Pond-choice">
-                                    <label>Choose a Location :</label>
+                                    <h5>Choose a Location :</h5>
                                     <select id="pondSelect" name="pond_select">
                                         <option value="Dhordo">Dhordo</option>
                                         <option value="Khavda">Khavda</option>
@@ -120,7 +120,7 @@
                                 <select id="monthSelectEnd" name="end_month" required></select>
                             </label>
                         </div> -->
-                        <div class="initial-concentration">
+                        <!-- <div class="initial-concentration">
                             <hr id="init_line" style="border: 1px solid black; width: 100%; margin: 8px;">
                             <label>
                                 <h5>Enter the Initial Concentration :</h5>
@@ -128,8 +128,17 @@
                                     <input type="text" inputmode="decimal" pattern="[0-9]*[.]?[0-9]*" name="initial-concentration" id="inputing" class="mb-2" required><p><b>GPL</b></p>
                                 </div>
                             </label>
-                        </div>
+                        </div> -->
                         <div id="zone_inp" class="mb-2" style="text-align: center; display: block;">
+                            <div class="initial-concentration">
+                                <hr id="init_line" style="border: 1px solid black; width: 100%; margin: 8px;">
+                                <label>
+                                    <h5>Enter the Initial Concentration :</h5>
+                                    <div class="init_input">
+                                        <input type="text" inputmode="decimal" pattern="[0-9]*[.]?[0-9]*" name="initial-concentration" id="inputing" class="mb-2"   ><p><b>GPL</b></p>
+                                    </div>
+                                </label>
+                            </div>
                             <hr style="border: 1px solid black; width: 100%; margin: 4px;">
                             <label for="evap_zone_file" class="form-label p-1">Upload <b>Evaporation</b> CSV file in
                                 <a href="#" id="notify" data-bs-toggle="modal" data-bs-target="#myModal" data-img="static/images/format_evap.png">this format</a>
@@ -144,7 +153,7 @@
                         </div>
 
                         <div id="pond_inp" class="mb-2" style="text-align: center; display: none;">
-                            <hr style="border: 1px solid black; width: 100%; margin: 5px;">
+                            <!-- <hr style="border: 1px solid black; width: 100%; margin: 5px;">
                             <label>     
                                 <h5>Enter the Brine pumping values :</h5>
                                 <div class="form-in-out">
@@ -157,7 +166,24 @@
                                 <a href="#" id="notify" data-bs-toggle="modal" data-bs-target="#myModal" data-img="static/images/pond_evap.png">this format</a>
                             </label>
                             <input type="file" name="evap_file" id="evap_pond_file" class="form-control"> 
-                            <button type="submit" class="btn btn-primary w-100 w-md-auto mt-3">Calculate</button>
+                            <button type="submit" class="btn btn-primary w-100 w-md-auto mt-3">Calculate</button> -->
+
+                            <!-- <hr id="line" style="border: 1px solid black; width: 100%; margin: 10px;">
+                            <div class="daysChoice">
+                                <h5>Select the range of Date :</h5>
+                                <label class="my-2" for="monthSelectStart">Starting Date: 
+                                    <select id="monthSelectStart" name="startMonthEvap" required></select>
+                                </label>
+                                <label class="mb-3" for="monthSelectEnd">Ending Date: 
+                                    <select id="monthSelectEnd" name="endMonthEvap" required></select>
+                                </label>
+                            </div> -->
+                            <!-- <hr id="line" style="border: 1px solid black; width: 100%; margin: 10px;"> -->
+                            <label for="c2_file" class="form-label p-1">Upload <b>Input data</b> CSV file in
+                                <a href="#" id="notify" data-bs-toggle="modal" data-bs-target="#myModal" data-img="static/images/c2_pond.png">this format</a>
+                            </label>
+                            <input type="file" name="c2_file" id="c2_file" class="form-control mb-3"> 
+                            <button type="submit" class="btn btn-primary w-100 w-md-auto">Predict</button>
                         </div>
                         <input type="hidden" name="toggle" id="modeToggle" value="{{ selected_mode or 'a' }}">
                     </form>
@@ -217,20 +243,43 @@
 
                         console.log("rowData:", rowData);
                         console.log("columnDefs:", columnDefs);
-
-                        const gridOptions = {
-                        headerHeight: 70,
-                        columnDefs,
-                        rowData,
-                        theme:'legacy',
-                        defaultColDef: {
-                            sortable: true,
-                            filter: true,
-                            resizable: true,
-                        },
-                        pagination: true,
-                        paginationPageSize: 10,
-                        };
+                        let gridOptions = {}
+                        if(columnDefs.length == 2){
+                            console.log("iffff")
+                            gridOptions = {
+                            headerHeight: 70,
+                            columnDefs,
+                            rowData,
+                            theme:'legacy',
+                            columnDefs: [
+                                { headerName: "Date", field: "Date", flex: 1 },
+                                { headerName: "Final Concentration (gpl)", field: "Final Concentration (gpl)", flex: 1 }
+                            ],
+                            defaultColDef: {
+                                sortable: true,
+                                filter: true,
+                                resizable: true,
+                            },
+                            pagination: true,
+                            paginationPageSize: 10,
+                            };
+                        } else {
+                            console.log("Elseee")
+                            gridOptions = {
+                            headerHeight: 70,
+                            columnDefs,
+                            rowData,
+                            theme:'legacy',
+                            defaultColDef: {
+                                sortable: true,
+                                filter: true,
+                                resizable: true,
+                            },
+                            pagination: true,
+                            paginationPageSize: 10,
+                            };
+                        }
+                            
 
                         const gridDiv = document.querySelector('#myGrid');
                         gridApi = agGrid.createGrid(document.querySelector("#myGrid"), gridOptions);
@@ -242,6 +291,7 @@
                 <div style="overflow-x: auto; border: 1px solid #ccc; margin-bottom: 10px;">
                     {{ plot_html|safe }}
                 </div>
+                {% if plot_v and plot_t %}
                 <h4 style="padding: 20px 0 10px 0;">Volume Visualization : </h4>
                 <div style="overflow-x: auto; border: 1px solid #ccc; margin-bottom: 10px;">
                     {{ plot_v |safe }}
@@ -250,6 +300,7 @@
                 <div style="overflow-x: auto; border: 1px solid #ccc; margin-bottom: 10px;">
                     {{ plot_t |safe }}
                 </div>
+                {% endif %}
             </div>
             <script>
                 document.getElementById('progress').style.display='block'
@@ -305,6 +356,28 @@
         //     option.textContent = `${monthStr}-${yearend}`;
         //     selectend.appendChild(option);
         // }
+
+        const selectst = document.getElementById("monthSelectStart");
+        const yearst = 2025;
+
+        for (let month = 1; month <= 12; month++) {
+            const monthStr = month.toString().padStart(2, '0');  // 01–12
+            const option = document.createElement("option");
+            option.value = `${yearst}-${monthStr}`;              // ✅ Corrected to YYYY-MM
+            option.textContent = `${monthStr}-${yearst}`;
+            selectst.appendChild(option);
+        }
+
+        const selectend = document.getElementById("monthSelectEnd");
+        const yearend = 2025;
+
+        for (let month = 1; month <= 12; month++) {
+            const monthStr = month.toString().padStart(2, '0');
+            const option = document.createElement("option");
+            option.value = `${yearend}-${monthStr}`;             // ✅ Corrected to YYYY-MM
+            option.textContent = `${monthStr}-${yearend}`;
+            selectend.appendChild(option);
+        }
 
         //Progress and Loading Overlay
         document.addEventListener("DOMContentLoaded", function () {
@@ -371,21 +444,21 @@
 
             // Always remove previous `name="evap_file"` from both
             document.getElementById('evap_zone_file').removeAttribute('name');
-            document.getElementById('evap_pond_file').removeAttribute('name');
-            document.getElementById('brine_in_pond_file').removeAttribute('required')
-            document.getElementById('brine_out_pond_file').removeAttribute('required')
-            document.getElementById('brine_in_pond_file').removeAttribute('name')
-            document.getElementById('brine_out_pond_file').removeAttribute('name')
+            // document.getElementById('evap_pond_file').removeAttribute('name');
+            // document.getElementById('brine_in_pond_file').removeAttribute('required')
+            // document.getElementById('brine_out_pond_file').removeAttribute('required')
+            // document.getElementById('brine_in_pond_file').removeAttribute('name')
+            // document.getElementById('brine_out_pond_file').removeAttribute('name')
 
             // Set it on the currently selected one
             if (option === 'a') {
                 document.getElementById('evap_zone_file').setAttribute('name', 'evap_file');
             } else {
-                document.getElementById('evap_pond_file').setAttribute('name', 'evap_file');
-                document.getElementById('brine_in_pond_file').setAttribute('required', '')
-                document.getElementById('brine_out_pond_file').setAttribute('required', '')
-                document.getElementById('brine_in_pond_file').setAttribute('name', 'in_file')
-                document.getElementById('brine_out_pond_file').setAttribute('name', 'out_file')
+                // document.getElementById('evap_pond_file').setAttribute('name', 'evap_file');
+                // document.getElementById('brine_in_pond_file').setAttribute('required', '')
+                // document.getElementById('brine_out_pond_file').setAttribute('required', '')
+                // document.getElementById('brine_in_pond_file').setAttribute('name', 'in_file')
+                // document.getElementById('brine_out_pond_file').setAttribute('name', 'out_file')
             }
 
             // Update the hidden mode field

@@ -270,6 +270,10 @@
       margin: 7px;
       outline: none;
 }
+.Pond-choice {
+  display: flex;
+  align-items: center;
+}
 .category {
   display: flex;
   justify-content: center;
@@ -284,8 +288,7 @@
 .daysChoice {
   text-align: center;
 }
-.initial-concentration input, 
-.daysChoice input {
+.initial-concentration input {
   padding: 8px;
   padding-left: 25px;
   border: 1px solid black;
